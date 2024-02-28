@@ -17,5 +17,5 @@ def check_temp(min_value):
 # *** Main routine ***
 
 while True:
-  to_check = check_temp(-459)
+  to_check = check_temp(-273)
   print("Success")
