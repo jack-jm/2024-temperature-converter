@@ -5,6 +5,13 @@ class Converter:
 
   def __init__(self):
 
+    # Initialise variables (such as the feedback variable)
+    self.var_feedback = StringVar()
+    self.var_feedback.set("")
+
+    self.var_has_error = StringVar()
+    self.var_has_error.set("no")
+
     # common font for all buttons
     # Arial, size 14, bold, with white text
     button_font = ("Arial", "12", "bold")
@@ -35,8 +42,8 @@ class Converter:
     self.temp_entry.grid(row=2, padx=10, pady=10)
 
     error = "Please enter a number"
-    
-    self.temp_error = Label(self.temp_frame, text=error,
+
+    self.temp_error = Label(self.temp_frame, text="",
                             fg="#9C0000")
     self.temp_error.grid(row=3)
 
@@ -74,24 +81,54 @@ class Converter:
                                     state=DISABLED)
     self.to_history_button.grid(row=1, column=1, padx=5, pady=5)
 
-  def check_temp(min_value):
+  def check_temp(self, min_value):
+
+    has_error = "no"
     error = "Please enter a number that is more " \
             "than {}".format(min_value)
-  
-    try:
-        response = float(input("Choose a number: "))
-  
-        if response < min_value:
-          print(error)
-        else:
-          return response
-  
-    except ValueError:
-      print(error)
 
-  def to_celsius(self):
+    # check that user has entered a valid number
+
+    response = self.temp_entry.get()
+
+    try:
+        response = float(response)
+
+        if response < min_value:
+          has_error = "yes"
+
+    except ValueError:
+      has_error = "yes"
+
+    # Sets var_has_error so that entry box and
+    # labels can be correctly formatted by formatting function
+    if has_error == "yes":
+      self.var_has_error.set("yes")
+      self.var_feedback.set(error)
+      return "invalid"
+
+    # If we have no errors
+    else:
+      # set to 'no' in case of previous errors
+      self.var_has_error.set("no")
+
+      # return number to be
+      # converted and enable history button
+      self.to_history_button.config(NORMAL)
+      return response
+
+  def to_celsius(self): 
 
     self.check_temp(-459)
+
+  # Shows user output and clears entry widget
+  # ready for next calculation
+  def output_answer(self):
+    output = self.var_feedback.get()
+    has_errors = self.var_has_error.get()
+
+    if has_errors == "yes":
+
 
 # main routine
 if __name__  == "__main__":
