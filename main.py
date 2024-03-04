@@ -114,7 +114,7 @@ class Converter:
 
       # return number to be
       # converted and enable history button
-      self.to_history_button.config(NORMAL)
+      self.to_history_button.config(state=NORMAL)
       return response
 
   def to_celsius(self): 

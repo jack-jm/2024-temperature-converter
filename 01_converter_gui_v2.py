@@ -60,10 +60,11 @@ class Converter:
     self.to_celsius_button.grid(row=0, column=0, padx=5, pady=5)
 
     self.to_fahrenheit_button = Button(self.button_frame,
-                                         text="To Fahrenheit",
-                                         bg="#009900",
-                                         fg=button_fg,
-                                         font=button_font, width=12)
+                                       text="To Fahrenheit",
+                                       bg="#009900",
+                                       fg=button_fg,
+                                       font=button_font, width=12,
+                                       command=self.to_fahrenheit)
     self.to_fahrenheit_button.grid(row=0, column=1, padx=5, pady=5)
 
     self.to_help_button = Button(self.button_frame,
@@ -124,6 +125,17 @@ class Converter:
       # do calculation
       self.var_feedback.set("Converting {} to "
                             "C :)".format(to_convert))
+
+    self.output_answer()
+
+  # check temperature is more than -273 and convert it
+  def to_fahrenheit(self):
+    to_convert = self.check_temp(-273)
+
+    if to_convert != "invalid":
+      # do calculation
+      self.var_feedback.set("Converting {} to "
+                            "F :)".format(to_convert))
 
     self.output_answer()
 
