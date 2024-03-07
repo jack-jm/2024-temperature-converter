@@ -56,7 +56,7 @@ class Converter:
                                     bg="#990099",
                                     fg=button_fg,
                                     font=button_font, width=12,
-                                    command=self.to_celsius)
+                                    command=lambda: self.temp_convert(-459))
     self.to_celsius_button.grid(row=0, column=0, padx=5, pady=5)
 
     self.to_fahrenheit_button = Button(self.button_frame,
@@ -64,7 +64,7 @@ class Converter:
                                        bg="#009900",
                                        fg=button_fg,
                                        font=button_font, width=12,
-                                       command=self.to_fahrenheit)
+                                       command=lambda: self.temp_convert(-273))
     self.to_fahrenheit_button.grid(row=0, column=1, padx=5, pady=5)
 
     self.to_help_button = Button(self.button_frame,
@@ -118,24 +118,41 @@ class Converter:
       self.to_history_button.config(state=NORMAL)
       return response
 
-  def to_celsius(self): 
-    to_convert = self.check_temp(-459)
+  @staticmethod
+  def round_ans(val):
+    var_rounded = (val * 2 + 1) // 2
+    return "{:.0f}".format(var_rounded)
+  
+  # check temperature is valid and convert it
+  def temp_convert(self, min_val): 
+    to_convert = self.check_temp(min_val)
+    deg_sign = u'\N{DEGREE SIGN}'
+    set_feedback = "yes"
+    answer = ""
+    from_to = ""
 
-    if to_convert != "invalid":
+    if to_convert == "invalid":
+      set_feedback = "no"
+
+    # Convert to Celsius
+    elif min_val == -459:
       # do calculation
-      self.var_feedback.set("Converting {} to "
-                            "C :)".format(to_convert))
+      answer = (float(to_convert) - 32) * 5 / 9
+      from_to = "{} F{} is {} C{}"
 
-    self.output_answer()
+    # convert to Fahrenheit
+    else:
+      answer = float(to_convert) * 1.8 + 32
+      from_to = "{} C{} is {} F{}"
 
-  # check temperature is more than -273 and convert it
-  def to_fahrenheit(self):
-    to_convert = self.check_temp(-273)
+    if set_feedback == "yes":
+      to_convert = self.round_ans(to_convert)
+      answer = self.round_ans(answer)
 
-    if to_convert != "invalid":
-      # do calculation
-      self.var_feedback.set("Converting {} to "
-                            "F :)".format(to_convert))
+      # create user output and add to calculation history
+      feedback = from_to.format(to_convert, deg_sign,
+                                answer, deg_sign)
+      self.var_feedback.set(feedback)
 
     self.output_answer()
 
