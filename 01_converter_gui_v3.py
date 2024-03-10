@@ -12,6 +12,8 @@ class Converter:
     self.var_has_error = StringVar()
     self.var_has_error.set("no")
 
+    self.all_calculations = []
+
     # common font for all buttons
     # Arial, size 14, bold, with white text
     button_font = ("Arial", "12", "bold")
@@ -153,6 +155,8 @@ class Converter:
       feedback = from_to.format(to_convert, deg_sign,
                                 answer, deg_sign)
       self.var_feedback.set(feedback)
+
+      self.all_calculations.append(feedback)
 
     self.output_answer()
 
